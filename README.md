@@ -1,7 +1,9 @@
 # bSTAB
 
-Hamburg University of Technology
+Hamburg University of Technology,
+
 Dynamics Group
+
 www.tuhh.de/dyn
 
 
