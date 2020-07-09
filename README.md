@@ -8,6 +8,7 @@ www.tuhh.de/dyn
 
 
 Open-source software for computing the basin stability of nonlinear multi-stable dynamical systems
+
 [![DOI](https://zenodo.org/badge/278140661.svg)](https://zenodo.org/badge/latestdoi/278140661)
 
 Following
