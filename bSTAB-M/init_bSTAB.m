@@ -1,53 +1,70 @@
-function [props] = init_bSTAB(case_path, sub_case_path)
-% [props] = init_bSTAB(case_path, sub_case_path)
+function [props] = init_bSTAB(varargin)
+% [props] = init_bSTAB(subCase_path)
 
-% initializer of the bSTAB library. Adds local routines to the Matlab
-% search path, and creates the <props> struct that will carry all relevant
-% properties and settings through the computations.
+% initializer for the active Matlab paths, relevant directory paths and the
+% properties struct
 
-% ### input:
-% - case_path: path to system definition file
-% - sub_case_path: local subdirectory for current study
-
-% ### output:
-% - props: properties struct
-
-% ### open points: 
-% - default inputs, such that the user does not have to specify
-% anything as input. if no sub-case was specified: make up some data-time 
-% string to create a distinct folder
-
-% -------------------------------------------------------------------------
-% Copyright (C) 2020 Merten Stender (m.stender@tuhh.de)
-
-% This program is free software: you can redistribute it and/or modify it 
-% under the terms of the GNU General Public License as published by the 
-% Free Software Foundation, either version 3 of the License, or (at your 
-% option) any later version.
-
-% This program is distributed in the hope that it will be useful, but 
-% WITHOUT ANY WARRANTY; without even the implied warranty of 
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General 
-% Public License for more details.
-
-% You should have received a copy of the GNU General Public License along 
-% with this program. If not, see http://www.gnu.org/licenses/
+% (c) Merten Stender
+% Hamburg University of Technology, Dynamics Group
+% www.tuhh.de/dyn
+% m.stender@tuhh.de
+% 
+% 08.01.2021
 % -------------------------------------------------------------------------
 
 
-% 1. add the library to the active Matlab path
-addpath(genpath('../../utils'));  % bSTAB utilities
+% todo: default inputs, such that the user does not have to specify
+% anything as input
 
-% 2. add your custom case to the active Matlab path
-addpath(case_path); % place all your custom functions here
 
-% 3. create a subfolder for the current analysis
-mkdir([case_path, '/', sub_case_path]); 
-addpath([case_path, '/', sub_case_path]);
+% if no sub-case was specified: make up some data-time string to create a
+% distinct folder
+if length(varargin)>0
+    subCasePath = varargin{1}; 
+else
+    subCasePath = ['analysis_', date];
+end
+
+% 1. get current directory (which we assume to be one level lower than the 
+% bSTAB toolbox:
+% ./<currentCase>/      <--- we're calling from here
+% ./init_bSTAB.m        <--- this function
+% ./utils/              <--- we need to add these to the active path
+%./<currentCase>/<currentSubCase> <--- the directory to be created
+
+casePath = pwd; 
+addpath(casePath);
+
+% 2. find 'utils-bSTAB' on the current path and add to active path
+if ~isunix
+    splts = strfind(casePath, '\');
+    if exist([casePath(1:splts(end)), 'utils_bSTAB'])==7
+        addpath(genpath([casePath(1:splts(end)), 'utils_bSTAB']));
+    else
+        warning('could not locate /utils_bSTAB!');
+    end
+    
+else
+    splts = strfind(casePath, '/');
+    if exist([casePath(1:splts(end)), 'utils_bSTAB'])==7
+        addpath(genpath([casePath(1:splts(end)), 'utils_bSTAB']));
+    else
+        warning('could not locate /utils_bSTAB!');
+    end
+end
+
+% 3. create subcase folder in current case
+if ~isunix
+mkdir([casePath, '\', subCasePath]); 
+addpath([casePath, '\', subCasePath]); 
+else
+    mkdir([casePath, '/', subCasePath]); 
+addpath([casePath, '/', subCasePath]); 
+end
 
 % 4. initialize the props struct that will be the anchor of the calculation
-props.case_path = case_path;
-props.sub_case_path = [case_path, '/', sub_case_path];
+props.casePath = casePath;
+props.subCasePath = [casePath, '/', subCasePath];
 
 end
 
