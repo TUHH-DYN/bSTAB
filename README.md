@@ -1,5 +1,5 @@
 # bSTAB
-## - An open-source software for computing the basin stability of nonlinear multi-stable dynamical systems
+## An open-source software for computing the basin stability of nonlinear multi-stable dynamical systems
 
 Hamburg University of Technology, Dynamics Group, www.tuhh.de/dyn
 
