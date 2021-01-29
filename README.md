@@ -1,9 +1,10 @@
 # bSTAB
+## - An open-source software for computing the basin stability of nonlinear multi-stable dynamical systems
 
 Hamburg University of Technology, Dynamics Group, www.tuhh.de/dyn
+
 Developed by Merten Stender, m.stender@tuhh.de
 
-Open-source software for computing the basin stability of nonlinear multi-stable dynamical systems
 [![DOI](https://zenodo.org/badge/278140661.svg)](https://zenodo.org/badge/latestdoi/278140661)
 
 
@@ -16,4 +17,11 @@ The pervasiveness of multi-stability in nonlinear dynamical systems calls for no
 
 # Overview and tutorial case
 
-Coming soon!
+Current tutorial cases:
+- damped driven pendulum (bi-stable)
+- multi-stable Duffing oscillator (5 co-existing limit cycles)
+- Lorenz system (co-existing chaotic attractors)
+- non-smooth friction oscillator (bi-stable)
+
+
+Details coming soon!
