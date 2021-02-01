@@ -36,8 +36,8 @@ Current tutorial cases:
 
 The damped driven pendulum 
 
-    dy_1 /dt = y_2
-    dy_2 /dt = 
+    $dy_1 /dt = y_2$
+    $dy_2 /dt = -\alpha y_1 + T - K*sin(y_1)$
 
 exhibits bi-stability (competing fixed point and limit cycle solution) for a specific parameter setting as descriped by Menck et al. [1]. 
 
