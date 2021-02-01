@@ -32,6 +32,15 @@ Current tutorial cases:
 - Lorenz system (co-existing chaotic attractors)
 - non-smooth friction oscillator (bi-stable)
 
+## Damped driven pendulum: bi-stability
+
+The damped driven pendulum 
+
+    dy_1 /dt = y_2
+    dy_2 /dt = 
+
+exhibits bi-stability (competing fixed point and limit cycle solution) for a specific parameter setting as descriped by Menck et al. [1]. 
+
 
 Details coming soon!
 
