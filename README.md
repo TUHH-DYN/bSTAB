@@ -59,4 +59,4 @@ plot_bs_statespace(props, res_detail, 1, 2);
 As a result, the basin stability values are shown by means of a bar plot. In this case, there is a probability of 15% to arrive on the fixed point solution, whereas there is a probability of 85% to arrive on the limit cycle solution. One may hence state that the LC solution is *globally more stable* than the FP solution. The Monte Carlo sampling states are depicted in state space and colored by their time-asymptotic behavior. Even for this small system, the shape of the basins of attraction is complicated. 
 
 ![basin stability bar graph](https://github.com/TUHH-DYN/bSTAB/blob/master/bSTAB-M/case_pendulum/fig_basinstability.png)
-
+![state space graph](https://github.com/TUHH-DYN/bSTAB/blob/master/bSTAB-M/case_pendulum/fig_statespace.png)
