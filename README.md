@@ -36,16 +36,24 @@ Current tutorial cases:
 
 The damped driven pendulum 
 
-    $dy_1 /dt = y_2$
-    $dy_2 /dt = -\alpha y_1 + T - K*sin(y_1)$
+    dy_1 /dt = y_2
+    dy_2 /dt = -a* y_1 + T - K*sin(y_1)
 
-exhibits bi-stability (competing fixed point and limit cycle solution) for a specific parameter setting as descriped by Menck et al. [1]. 
+exhibits bi-stability (competing fixed point and limit cycle solution) for specific parameter settings (e.g. a=0.1, K=1.0, T=0.5) as descriped by Menck et al. [1]. Both solutions are stable from a local perspective (negative real part, Floquet multiplier smaller than unity), such that the time-asymptotic behavior of the pendulum solely depends on the initial condition from which it is started. The basin stability analysis will now analyse the probabilities of arriving on either the fixed point (FP) or the limit cycle (LC) solution by sampling a set of N initial conditions from a region of interest selected by the user. The probabilities are proportional to the volumes of the basins of attraction within the region of interest, i.e. a subset of the state space. 
 
-
-Details coming soon!
+Running the basin stability analysis using **bSTAB** comes down to 
 
 ```Matlab
-current_case = 'pendulum_case1'
-props = init_bSTAB(current_case)
-props = setup_pendulum(props)
+current_case = 'pendulum_case1';
+[props] = init_bSTAB(currentCase);
+[props] = setup_pendulum(props);
+[res_tab, res_detail, props] = compute_bs(props);
 ```
+
+which initializes the toolbox and sets a name for the current case study. The case is defined by the user in setup_pendulum function, and the basin stability analysis is run by calling the compute_bs routine. The results can be visualized by calling several pre-defined plotting functionalities
+
+```Matlab
+plot_bs_bargraph(props, res_tab, true);
+plot_bs_statespace(props, res_detail, 1, 2);
+```
+As a result, the basin stability values are shown by means of a bar plot. In this case, there is a probability of 15% to arrive on the fixed point solution, whereas there is a probability of 85% to arrive on the limit cycle solution. One may hence state that the LC solution is *globally more stable* than the FP solution. The Monte Carlo sampling states are depicted in state space and colored by their time-asymptotic behavior. Even for this small system, the shape of the basins of attraction is complicated. 
