@@ -34,3 +34,9 @@ Current tutorial cases:
 
 
 Details coming soon!
+
+```Matlab
+current_case = 'pendulum_case1'
+props = init_bSTAB(current_case)
+props = setup_pendulum(props)
+```
