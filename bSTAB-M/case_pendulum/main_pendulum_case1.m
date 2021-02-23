@@ -63,17 +63,21 @@ plot_bs_featurespace(props, res_detail);
 
 %% Publication case 1: basin stability at fixed parameters
 
+alpha = 0.1;
+T = 0.5;
+K = 1.0; 
+
 tspan = [0, 30*pi]; 
 options = odeset('RelTol',1e-8);
 
 % y1: fixed point solution
 x0 = [0.1; 0.1];
-[T_fp, Y_fp] = ode45(@(t,y) ode_pendulum(t, y, 0.1, 0.5, 1.0), tspan, x0, options);
+[T_fp, Y_fp] = ode45(@(t,y) ode_pendulum(t, y, alpha, T, K), tspan, x0, options);
 
 % y3: limit cycle solution
 K = 1; 
 x0 = [pi-asin(0.5/K); 0.1];
-[T_lc, Y_lc] = ode45(@(t,y) ode_pendulum(t, y, 0.1, 0.5, 1.0), tspan, x0, options);
+[T_lc, Y_lc] = ode45(@(t,y) ode_pendulum(t, y, alpha, T, K), tspan, x0, options);
 
 figure; 
 plot(T_fp, Y_fp(:,2), 'lineWidth', 2); hold on; 
