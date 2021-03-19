@@ -16,8 +16,10 @@ function [res_tab, res_detail, props] = compute_bs(props)
 % ### open points:
 % -
 
+% 18.03.2021
 % -------------------------------------------------------------------------
 % Copyright (C) 2020 Merten Stender (m.stender@tuhh.de)
+% Hamburg University of Technology, Dynamics Group, www.tuhh.de/dyn
 
 % This program is free software: you can redistribute it and/or modify it
 % under the terms of the GNU General Public License as published by the
@@ -124,7 +126,7 @@ end
 %% classify the feature vectors
 
 % do the classification based on the extracted features
-[class_result, props] = classify_solution(feature_array, props);
+[class_result, props] = classify_solution(feature_array, ic_grid, props);
 
 
 %% compute the basin stability values
