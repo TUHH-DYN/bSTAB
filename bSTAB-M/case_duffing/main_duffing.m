@@ -9,7 +9,7 @@
 % www.tuhh.de/dyn
 % m.stender@tuhh.de
 % 
-% 08.01.2021
+% 31.03.2021
 % -------------------------------------------------------------------------
 
 
@@ -67,46 +67,52 @@ plot_bs_featurespace(props, res_detail);
 
 %% Publication: state space and steady-state trajectories
 
+% computing the trajectories for all the template solutions provided in the
+% setup definition
 tspan = [0:1/10:50]; 
 options = odeset('RelTol',1e-8);
 
 x01 = props.templ.Y0{1};
-[T1, Y1] = ode45(@(t,y) ode_duffing(t, y, 0.08, 1.0, 0.2), tspan, x01, options);
+p01 = num2cell(props.templ.modelParams{1});
+[T1, Y1] = ode45(@(t,y) ode_duffing(t, y, p01{:}), tspan, x01, options);
 
 x02 = props.templ.Y0{2};
-[T2, Y2] = ode45(@(t,y) ode_duffing(t, y, 0.08, 1.0, 0.2), tspan, x02, options);
+p02 = num2cell(props.templ.modelParams{2});
+[T2, Y2] = ode45(@(t,y) ode_duffing(t, y, p02{:}), tspan, x02, options);
 
 x03 = props.templ.Y0{3};
-[T3, Y3] = ode45(@(t,y) ode_duffing(t, y, 0.08, 1.0, 0.2), tspan, x03, options);
+p03 = num2cell(props.templ.modelParams{3});
+[T3, Y3] = ode45(@(t,y) ode_duffing(t, y, p03{:}), tspan, x03, options);
 
 x04 = props.templ.Y0{4};
-[T4, Y4] = ode45(@(t,y) ode_duffing(t, y, 0.08, 1.0, 0.2), tspan, x04, options);
+p04 = num2cell(props.templ.modelParams{4});
+[T4, Y4] = ode45(@(t,y) ode_duffing(t, y, p04{:}), tspan, x04, options);
 
 x05 = props.templ.Y0{5};
-[T5, Y5] = ode45(@(t,y) ode_duffing(t, y, 0.08, 1.0, 0.2), tspan, x05, options);
+p05 = num2cell(props.templ.modelParams{5});
+[T5, Y5] = ode45(@(t,y) ode_duffing(t, y, p05{:}), tspan, x05, options);
 
 % time signals
 figure; 
 ax1 = subplot(5,1,1);
-plot(T1, Y1(:,1), 'lineWidth', 2);
-set(gca, 'xtick', []); 
+plot(T1, Y1(:,1), 'lineWidth', 2); ylabel('$y_1$', 'interpreter', 'latex');
+set(gca, 'xtick', []); title('initial condition $y_{0, 1}$', 'interpreter', 'latex');
 
 ax2 = subplot(5,1,2);
-plot(T2, Y2(:,1), 'lineWidth', 2);
-set(gca, 'xtick', []); 
+plot(T2, Y2(:,1), 'lineWidth', 2);ylabel('$y_1$', 'interpreter', 'latex');
+set(gca, 'xtick', []); title('initial condition $y_{0, 2}$', 'interpreter', 'latex');
 
 ax3 = subplot(5,1,3);
-plot(T3, Y3(:,1), 'lineWidth', 2);
-ylabel('$y_1$', 'interpreter', 'latex'); 
-set(gca, 'xtick', []); 
+plot(T3, Y3(:,1), 'lineWidth', 2); ylabel('$y_1$', 'interpreter', 'latex');
+set(gca, 'xtick', []); title('initial condition $y_{0, 3}$', 'interpreter', 'latex');
 
 ax4 = subplot(5,1,4);
-plot(T4, Y4(:,1), 'lineWidth', 2);
-set(gca, 'xtick', []); 
+plot(T4, Y4(:,1), 'lineWidth', 2);ylabel('$y_1$', 'interpreter', 'latex');
+set(gca, 'xtick', []); title('initial condition $y_{0, 4}$', 'interpreter', 'latex');
 
 ax5 = subplot(5,1,5);
-plot(T5, Y5(:,1), 'lineWidth', 2);
-xlabel('time', 'interpreter', 'latex'); 
+plot(T5, Y5(:,1), 'lineWidth', 2);ylabel('$y_1$', 'interpreter', 'latex');
+xlabel('time', 'interpreter', 'latex'); title('initial condition $y_{0, 5}$', 'interpreter', 'latex');
 linkaxes([ax1, ax2, ax3, ax4, ax5], 'xy'); 
 saveas(gcf,[props.subCasePath,'/publication_trajectories'], 'png');
 savefig(gcf,[props.subCasePath,'/publication_trajectories']);
@@ -119,7 +125,9 @@ plot(Y2(end-100:end,1), Y2(end-100:end,2), 'lineWidth', 2);
 plot(Y3(end-200:end,1), Y3(end-200:end,2), 'lineWidth', 2);
 plot(Y4(end-200:end,1), Y4(end-200:end,2), 'lineWidth', 2);
 plot(Y5(end-300:end,1), Y5(end-300:end,2), 'lineWidth', 2);
-legend('$y_1$', '$y_2$', '$y_3$', '$y_4$', '$y_5$')
+l=legend('$\bar{y}_1$', '$\bar{y}_2$', '$\bar{y}_3$', '$\bar{y}_4$', '$\bar{y}_5$');
+l.Interpreter = 'Latex';
+title('5 co-existing attractors');
 xlabel('$y_1$', 'interpreter', 'latex');
 ylabel('$y_2$', 'interpreter', 'latex');
 saveas(gcf,[props.subCasePath,'/publication_statespace'], 'png');
