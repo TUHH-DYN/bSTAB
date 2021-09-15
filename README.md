@@ -7,7 +7,7 @@ Developed by Merten Stender, m.stender@tuhh.de
 
 Reference the code by [![DOI](https://zenodo.org/badge/278140661.svg)](https://zenodo.org/badge/latestdoi/278140661)
 
-Full (open access) paper published in Nonlinear Dynamics: https://link.springer.com/article/10.1007/s11071-021-06786-5
+**Full (open access) paper published in Nonlinear Dynamics: https://link.springer.com/article/10.1007/s11071-021-06786-5 **
 
 
 Many nonlinear dynamical systems exhibit *multi-stability*: at a fixed parameter configuration, the system has more than one possible steady-state solution. The time-asymptotic behavior hence solely depends on the initial condition or instantaneous perturbations from which the trajectories evolve. Conceptually, the sensitivity of the steady-state behavior is prescribed by the shape of the basins of attraction (the sets in state space that collect all states leading to the same attracting set). Classical local stability metrics (perturbation-based linearization) assess the stability of a state against *small perturbations*, i.e. stating whether the system will return back to the same attractor after being perturbed. However, the size of small perturbations is not strictly defined. Moreover, even small perturbations may result in a different steady-state solution if the system exhibits multi-stability. 
