@@ -62,3 +62,7 @@ As a result, the basin stability values are shown by means of a bar plot. In thi
 
 ![basin stability bar graph](https://github.com/TUHH-DYN/bSTAB/blob/master/bSTAB-M/case_pendulum/fig_basinstability.png)
 ![state space graph](https://github.com/TUHH-DYN/bSTAB/blob/master/bSTAB-M/case_pendulum/fig_statespace.png)
+
+
+# Common mistakes and Bugs
+Typically, errors arise when the dynamical system is not defined in a proper format that aligns with the integrators provided by Matlab, e.g. ode45. Please firstly check that you can run a time integration using your ODE definition without any issues. For testing, please refer to the small script TEST_duffing.m that is provided in the Duffing case folder. 
