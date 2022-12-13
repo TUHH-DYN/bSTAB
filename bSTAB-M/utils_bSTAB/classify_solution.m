@@ -13,7 +13,7 @@ function [class_result, props] = classify_solution(features, ic_grid, props)
 %   + class_result{2}: classification error (distance metric)
 
 
-% 18.03.2021
+% 13.12.2022
 % -------------------------------------------------------------------------
 % Copyright (C) 2020 Merten Stender (m.stender@tuhh.de)
 % Hamburg University of Technology, Dynamics Group, www.tuhh.de/dyn
@@ -139,36 +139,64 @@ elseif strcmp(props.clust.clustMode, 'unsupervised')
         
         % minimum number of points to form a cluster
         minpts = 10;
+        disp('unsupervised clustering - requiring a minimal number of 10 members per cluster')
         
-        % specify the range of the epsilon
+        disp('user warning: if the clustering does not work properly, this is due to weak features. Try to come up with more discriminative features!');
+        
+        % specify the range of the epsilon neighborhood to try, i.e. size
+        % of the feature space
         feat_ranges = max(features,[], 1)-min(features,[], 1);
-        eps_grid = linspace(min(feat_ranges)/200, min(feat_ranges), 200);
+        eps_grid = linspace(min(feat_ranges)/200, min(feat_ranges), 200);  % try those epsilon values
         
-        k_grid = nan(size(eps_grid));  % number of clusters
-        s_grid = nan(size(eps_grid));  % min silhouette values (which we want to maximize)
+        k_grid = nan(size(eps_grid));  % number of clusters for each epsilon value
+        s_grid = nan(size(eps_grid));  % corresponding silhouette values (which we want to maximize)
         
-        % variation of epsilon to find the best one
+        % variation of epsilon to find the best one, i.e. the one that
+        % maximizes the silhouette value
         for i = 1:length(eps_grid)
             class_label = dbscan(D,eps_grid(i),minpts,'Distance','precomputed');
-            class_label(class_label==-1) = NaN;
-            k_grid(i) = numel(unique(class_label(~isnan(class_label))));
-            s = silhouette(features,class_label);
-            s_grid(i) = min(s);
+            class_label(class_label==-1) = NaN;                             % (-1) means points that do not belong to any cluster
+            k_grid(i) = numel(unique(class_label(~isnan(class_label))));    % number of clusters
+            s = silhouette(features,class_label);                           % silhouette values for each point in each cluster. The larger the better
+            s_grid(i) = min(s);                                             % clustering quality is given by the worst s-value
             clear class_idx s
         end
+        
+        % to faciltate the optimal epsilon choice, we will replace the first 
+        % and last silhouette value (smallest/largest epsilon) by a small value, 
+        % such that the typical plateau-shaped range will be discovered as
+        % a peak as well (plot s_grid vs. eps_grid to see the effect).
+        s_grid(1) = 0.0; 
+        s_grid(end) = 0.0;
         
         % find the optimal epsilon through the maximum silhouette value
         if any(~isnan(s_grid))
             
-            [~, idx_optimal] = findpeaks(s_grid);
+            % select best epsilon by findpeaks. Why not use simply the
+            % maximum? Well, this will in most cases select epsilon too
+            % large, such that we will loose small clusters. Putting every
+            % point into the same cluster will eventually maximize the
+            % silhouette, correct? If the clustering is not satisfying, try
+            % to work on better features!
+            [~, idx_optimal, ~, prominence] = findpeaks(s_grid, 'MinPeakHeight', 0.9);
+            [~, idx_sort] = sort(prominence, 'descend');
+            idx_opt = idx_optimal(idx_sort);    % sort peak locations by peak prominence
+            if length(idx_opt)>1  % select most prominent peak in silhouette values if multiple peaks were detected.
+                idx_optimal = idx_opt(1);
+            else
+                idx_optimal = idx_opt;
+            end
+            
             if ~isempty(idx_optimal)
                 eps_optimal = eps_grid(idx_optimal);
-            else
+            else        % if no peak found: take the maximum as last resort
                 [~, idx_optimal] = max(s_grid);
                 eps_optimal = eps_grid(idx_optimal);
             end
             
             % now compute the final clustering
+            disp(['epsilon: ', num2str(eps_optimal)]);
+                        
             class_label = dbscan(D,eps_optimal,minpts,'Distance','precomputed');
             
             if props.flagShowFigures
@@ -181,12 +209,17 @@ elseif strcmp(props.clust.clustMode, 'unsupervised')
                 ax2 = subplot(1,2,2);
                 plot(eps_grid, s_grid, '-', 'marker', '.'); hold on;
                 plot(eps_grid(idx_optimal), s_grid(idx_optimal), 'r*');
+                if length(idx_opt)>1
+                    plot(eps_grid(idx_optimal), s_grid(idx_optimal), 'b+');
+                    legend('all points', 'selected finally', 'potential candidates');
+                else
+                    legend('all points', 'selected finally');
+                end
                 xlabel('epsilon'); ylabel('min. cluster silhouette value');
-                legend('to be maximized', 'selected finally');
                 title(['epsilon = ', num2str(eps_optimal)])
                 linkaxes([ax1, ax2], 'x');
-                savefig(gcf, [props.subCasePath, '/fig_DBSCAN_epsilon']);
-                saveas(gcf, [props.subCasePath, '/fig_DBSCAN_epsilon'], 'png');
+                savefig(gcf, [props.subCasePath, '/fig_clustering_details']);
+                saveas(gcf, [props.subCasePath, '/fig_clustering_details'], 'png');
                 close(gcf);
             end
             
