@@ -158,7 +158,11 @@ elseif strcmp(props.clust.clustMode, 'unsupervised')
             class_label(class_label==-1) = NaN;                             % (-1) means points that do not belong to any cluster
             k_grid(i) = numel(unique(class_label(~isnan(class_label))));    % number of clusters
             s = silhouette(features,class_label);                           % silhouette values for each point in each cluster. The larger the better
-            s_grid(i) = min(s);                                             % clustering quality is given by the worst s-value
+            if isempty(s)
+                s_grid(i) = 10000;
+            else
+                s_grid(i) = min(s);                                             % clustering quality is given by the worst s-value
+            end
             clear class_idx s
         end
         
